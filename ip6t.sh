@@ -2,6 +2,7 @@
 [[ "$EUID" -ne '0' ]] && echo "Error:This script must be run as root!" && exit 1;
 
 turnOnNat(){
+    sudo apt install iptables-persistent -y
     # 开启端口转发
     echo "1. 端口转发开启  【成功】"
     sed -n '/^net.ipv4.ip_forward=1/'p /etc/sysctl.conf | grep -q "net.ipv4.ip_forward=1"
@@ -40,6 +41,9 @@ dnat(){
     ip6tables -t nat -A PREROUTING -p udp --dport $localport -j DNAT --to-destination [$remote]:$remoteport
     ip6tables -t nat -A POSTROUTING -p tcp -d $remote --dport $remoteport -j SNAT --to-source $localIP
     ip6tables -t nat -A POSTROUTING -p udp -d $remote --dport $remoteport -j SNAT --to-source $localIP
+    netfilter-persistent save
+    netfilter-persistent start
+    sudo service ip6tables save
     echo "添加转发成功"
 }
 
