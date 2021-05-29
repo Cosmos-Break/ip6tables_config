@@ -30,6 +30,8 @@ turnOnNat
 
 
 dnat(){
+    echo "本机所有公网IPv6地址:" 
+    ip -o -6 addr list | grep -Ev '\s(docker|lo|link)' | awk '{print $4}' | cut -d/ -f1
     echo -n "输入 本机IPv6地址:";read localIP
     echo -n "输入 本机端口:";read localport
     echo -n "输入 目标地址:";read remote
