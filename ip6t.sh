@@ -50,17 +50,17 @@ dnat(){
 rmDnat(){
     ip6tables -t nat -nL --line-number
     echo -n "输入 删除PREROUTING编号(多个编号用空格分隔):";read -a pre_nums
-    pre_nums=$(echo ${pre_nums[*]} | tr ' ' '\n' | sort -nr)
+    sort_pre_nums=$(echo ${pre_nums[*]} | tr ' ' '\n' | sort -nr)
     echo -n "输入 删除POSTROUTING编号(多个编号用空格分隔):";read -a post_nums
-    post_nums=$(echo ${post_nums[*]} | tr ' ' '\n' | sort -nr)
-    echo "pre_nums:" ${pre_nums[*]}
-    echo "post_nums" ${post_nums[*]}
+    sort_post_nums=$(echo ${post_nums[*]} | tr ' ' '\n' | sort -nr)
+    echo "pre_nums:" ${sort_pre_nums[*]}
+    echo "post_nums" ${sort_post_nums[*]}
 
-    for pre_num in ${pre_nums[@]}
+    for pre_num in ${sort_pre_nums[@]}
     do
         ip6tables -t nat -D PREROUTING ${pre_num}
     done
-    for post_num in ${post_nums[@]}
+    for post_num in ${sort_post_nums[@]}
     do
         ip6tables -t nat -D POSTROUTING ${post_num}
     done
