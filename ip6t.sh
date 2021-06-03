@@ -53,6 +53,9 @@ rmDnat(){
     pre_nums=$(echo ${pre_nums[*]} | tr ' ' '\n' | sort -nr)
     echo -n "输入 删除POSTROUTING编号(多个编号用空格分隔):";read -a post_nums
     post_nums=$(echo ${post_nums[*]} | tr ' ' '\n' | sort -nr)
+    echo "pre_nums:" ${pre_nums[*]}
+    echo "post_nums" ${post_nums[*]}
+
     for pre_num in ${pre_nums[@]}
     do
         ip6tables -t nat -D PREROUTING ${pre_num}
